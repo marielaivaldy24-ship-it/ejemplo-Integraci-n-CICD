@@ -1,0 +1,28 @@
+name: CI
+on:
+  push:
+    pull_request:
+
+jobs:
+  contruir_y_probar:
+    runs-on: ubuntu-lastes
+    steps:
+     - name: Traer el codigo
+       uses: action/checkour@v4
+
+     - name: Prepara java 26
+       uses: action/setup-java@v4
+       with:
+         distribution: temurin
+         java-version: '26'
+         cache: maven     #cachea dependencia
+
+     - name: Compilar y Probar
+       run: mvn -B verify  #si un test falla, el pipeline se pone rojo aqui
+
+     - name: Contriur la imagen
+       run : docker build -t saludo:${{ github.sha }} .
+
+
+
+
